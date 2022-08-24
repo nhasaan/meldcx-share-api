@@ -1,8 +1,16 @@
 import { extname } from 'path';
 
-export const shFileFilter = (req, file, callback) => {
-  if (!file.originalname.match(/\.(sh)$/)) {
-    return callback(new Error('Only sh files are allowed!'), false);
+export const fileFilter = (req, file, callback) => {
+  const allowedFileTypes = process.env.FILE_TYPES.split(',');
+  const isAllowed = allowedFileTypes.some((t) =>
+    file.originalname.match('.' + t),
+  );
+
+  if (!isAllowed) {
+    return callback(
+      new Error('Only specified type of files are allowed!'),
+      false,
+    );
   }
   callback(null, true);
 };

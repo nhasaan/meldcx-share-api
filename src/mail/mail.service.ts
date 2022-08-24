@@ -18,10 +18,10 @@ export class MailService {
   async sendEmail({ config, ctx }: { config: MailConfig; ctx: any }) {
     return this.mailerService.sendMail({
       to: config.to,
-      from: config.from || '"No Reply" <noreply@allezpadel.dev>',
+      from: config.from || '"No Reply" <noreply@meldCX.test>',
       subject:
         config.subject ||
-        `Welcome to AllezPadel! Verify your email using the code!`,
+        `Welcome to meldCX! Verify your email using the code!`,
       template: config.templateName, // 'verification',
       context: ctx,
     });

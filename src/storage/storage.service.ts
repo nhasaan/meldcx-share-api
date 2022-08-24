@@ -20,18 +20,24 @@ export class StorageService {
     this.bucket = storageEnv().mediaBucket;
   }
 
-  async upload(
-    fileKey: string,
-    contentType: string,
-    media: Buffer,
-    metadata: { [key: string]: string }[],
-  ) {
+  async upload({
+    fileKey,
+    media,
+    metadata,
+    contentType,
+  }: {
+    fileKey: string;
+    media: Buffer;
+    metadata?: { [key: string]: string }[];
+    contentType?: string;
+  }) {
     const object = metadata.reduce((obj, item) => Object.assign(obj, item), {});
     const file = this.storage.bucket(this.bucket).file(fileKey);
     const stream = file.createWriteStream();
     stream.on('finish', async () => {
       return await file.setMetadata({
         metadata: object,
+        contentType,
       });
     });
     stream.end(media);
