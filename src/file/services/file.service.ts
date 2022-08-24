@@ -72,4 +72,28 @@ export class FileService {
       throw new BadRequestException(err.message);
     }
   }
+
+  async removeFile(
+    fileKey: string,
+    user: JwtPayload,
+  ): Promise<CommandResponse<any>> {
+    const response = new CommandResponse<any>();
+    try {
+      // TODO -
+      // Fetch the file from GCS using the uuid
+      const file = await this.fileModel.deleteOne({ fileKey, owner: user._id });
+
+      if (file) {
+        await this.storageService.delete(fileKey);
+      }
+      response.data = {
+        success: true,
+        message: 'deleted',
+      };
+      return response;
+    } catch (err) {
+      console.log(err);
+      throw new BadRequestException(err.message);
+    }
+  }
 }

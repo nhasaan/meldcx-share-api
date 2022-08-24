@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -42,5 +43,13 @@ export class FilesController {
     @Param('uuId') fileKey: string,
   ): Promise<CommandResponse<FetchFile>> {
     return await this.fileService.fetchFile(fileKey);
+  }
+
+  @Delete(':uuId')
+  async deleteFile(
+    @Param('uuId') fileKey: string,
+    @CurrentUser() user: JwtPayload,
+  ): Promise<CommandResponse<any>> {
+    return await this.fileService.removeFile(fileKey, user);
   }
 }
